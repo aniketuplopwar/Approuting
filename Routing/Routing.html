@@ -1,0 +1,68 @@
+<html>
+<head>
+<script  type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
+<script  type="text/javascript" src="src/AppRouter.js"></script>
+	
+</head>
+<body>
+	<a href="#offers">offers</a>
+	<a href="#offers/12345">offers by id</a>
+	<a href="#confirm">Confirm</a>
+
+	<script type="text/javascript">
+		var appRouterConfig = 	{
+			"routes" : {
+		  		"route1" : {
+		            "pattern" : "offers",
+		            "action" : "getOffers",
+		            "allowedSources" : ["route2"],
+		            "active" : true
+		         },
+		         "route2" : {
+		        	"pattern" : "offers/:id",
+			        "action" : "getOffersById",
+			        "allowedSources" : ["route1"],
+			        "active" : false
+		         },
+		         "route3" : {
+		         	"pattern" : "confirm",
+		          	"action" : "confirmOffer",
+		          	"allowedSources" : ["route2"],
+		          	"active" : false
+		         },
+		         "defaultRoute" : {
+		         	"pattern" : "/error",
+		          	"action" : "showError",
+		          	"allowedSources" : ["route2"],
+		          	"active" : false
+		         }
+		  }
+		};
+
+		window.location.hash = "offers";
+
+		var router = new AppRouter(appRouterConfig);
+		router.init();
+
+		$(router).on("getOffers", function(){
+			console.log("getOffers call");
+		});
+
+		$(router).on("getOffersById", function(e,id){
+			console.log("getOffersById call with param " + id);
+		});
+
+		$(router).on("confirmOffer", function(){
+			console.log("confirm offer call");
+		});
+
+		$(router).on("showError", function(){
+			window.location.hash = "error";
+			console.log("error page");
+		});
+
+
+
+	</script>
+</body>
+</html>
